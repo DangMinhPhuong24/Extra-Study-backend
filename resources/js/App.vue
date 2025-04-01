@@ -1,0 +1,3 @@
+<template>
+    Fuck why
+</template>
