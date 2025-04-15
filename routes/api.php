@@ -27,6 +27,9 @@ Route::group(['middleware' => 'api'], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/login', [AuthController::class, 'login']);
 
+        Route::post('/forgot_password', [AuthController::class, 'forgotPassword']);
+        Route::post('/reset_password', [AuthController::class, 'resetPassword']);
+
         Route::group(['middleware' => 'jwt_auth'], function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/profile', [AuthController::class, 'profile']);
@@ -46,16 +49,16 @@ Route::group(['middleware' => 'api'], function () {
 
         Route::group([], function () {
             Route::get('role_all',[RoleController::class, 'roleAll']);
-            Route::get('register_all',[RegisterController::class, 'registerAll']);
+            Route::get('register_all',[RegisterController::class, 'registerAll']); // phải đổi lại thành phân trang, tất cả các register để đăng ký 
             Route::get('teacher_all',[UserController::class, 'teacherAll']);
             Route::get('subject_all',[SubjectController::class, 'subjectAll']);
             Route::get('study_time_all',[StudyTimeController::class, 'studyTimeAll']);
         });
 
         Route::group([], function () {
-            Route::get('register_users', [RegisterUserController::class, 'index']);
+            Route::get('register_users', [RegisterUserController::class, 'index']); // Những register mà 1 học sinh đã đăng ký
             Route::post('create_register_user', [RegisterUserController::class, 'store']);
-            Route::get('detail_register_user', [RegisterUserController::class, 'show']);
+            Route::get('detail_register_user', [RegisterUserController::class, 'show']); // Danh sách học sinh đã đăng ký 
             Route::put('update_register_user', [RegisterUserController::class, 'update']);
             Route::delete('delete_register_user',[RegisterUserController::class, 'destroy']);
         });

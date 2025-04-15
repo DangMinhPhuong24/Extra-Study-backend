@@ -76,4 +76,15 @@ class UserRepository extends BaseRepository
     {
         return $this->model->searchByRoleId($roleId)->get();
     }
+
+    /**
+     * Get user by email
+     *
+     * @param $email
+     * @return mixed
+     */
+    public function getUserByEmail($email)
+    {
+        return $this->model->whereByEmail($email)->first();
+    }
 }

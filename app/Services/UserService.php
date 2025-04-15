@@ -167,7 +167,7 @@ class UserService
      */
     public function userAll()
     {
-        $userAll = $this->userRepository->getAllAPI();
+        $userAll = cache('user_all');
         if ($userAll) {
             $dataIndex = [
                 'statusCode' => Response::HTTP_OK,

@@ -13,6 +13,9 @@ return [
     |
     */
 
+    'token' => [
+        'exists' => 'Token không tồn tại.',
+    ],
     'old_password' => [
         'required' => 'Trường bắt buộc nhập.',
     ],
@@ -50,6 +53,7 @@ return [
         'regex' => 'Địa chỉ email chỉ có thể chứa chữ cái và số.',
         'ends_with' => 'Địa chỉ email phải là :values',
         'unique' => 'Địa chỉ email đã được sử dụng.',
+        'exists' => 'Địa chỉ email không tồn tại.',
     ],
     'username' => [
         'required_login' => 'Vui lòng nhập tên đăng nhập.',

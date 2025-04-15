@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Services\AuthService;
+use App\Http\Requests\User\UserAPIRequest;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\User\LoginAPIRequest;
-use App\Http\Requests\User\UserAPIRequest;
+use App\Http\Requests\User\ResetPasswordAPIRequest;
+use App\Http\Requests\User\ForgotPasswordAPIRequest;
 
 class AuthController extends AppBaseController
 {
@@ -13,7 +15,7 @@ class AuthController extends AppBaseController
     protected $authService;
     public function __construct(AuthService $authService)
     {
-        $this->middleware('jwt_auth', ['except' => ['login']]);
+        $this->middleware('jwt_auth', ['except' => ['login', 'forgotPassword', 'resetPassword']]);
         $this->authService = $authService;
     }
 
@@ -56,6 +58,26 @@ class AuthController extends AppBaseController
             $updateProfile['statusCode'],
             $updateProfile['message'],
             $updateProfile['data'] ?? []
+        );
+    }
+
+    public function forgotPassword(ForgotPasswordAPIRequest $request)
+    {
+        $forgotPassword = $this->authService->forgotPassword($request['email']);
+        return $this->sentResponse(
+            $forgotPassword['statusCode'],
+            $forgotPassword['message'],
+            $forgotPassword['data'] ?? []
+        );
+    }
+
+    public function resetPassword(ResetPasswordAPIRequest $request)
+    {
+        $resetPassword = $this->authService->resetPassword($request->all());
+        return $this->sentResponse(
+            $resetPassword['statusCode'],
+            $resetPassword['message'],
+            $resetPassword['data'] ?? []
         );
     }
 }

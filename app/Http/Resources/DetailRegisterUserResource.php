@@ -30,7 +30,7 @@ class DetailRegisterUserResource extends JsonResource
             'from_hour' => $this->register->studyTime->from_hour ?? null,
             'to_hour' => $this->register->studyTime->to_hour ?? null,
             'from_date' => format_date($this->register->studyTime->from_date) ?? null,
-            'to_date' => format_date($this->register->studyTime->to_date) ?? null
+            'to_date' => format_date($this->register->studyTime->to_date) ?? null,
         ];
     }
 }

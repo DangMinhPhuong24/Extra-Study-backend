@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Response;
 use App\Http\Resources\RoleResource;
 use App\Repositories\RoleRepository;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class RoleService
 {
@@ -23,7 +24,12 @@ class RoleService
      */
     public function roleAll()
     {
-        $roleAll = $this->roleRepository->getAllAPI();
+        Cache::remember('role_all', now()->addMinutes(10), function () {
+            return $this->roleRepository->getAllAPI();
+        });
+
+        $roleAll = cache('role_all');
+        
         if ($roleAll) {
             $dataIndex = [
                 'statusCode' => Response::HTTP_OK,

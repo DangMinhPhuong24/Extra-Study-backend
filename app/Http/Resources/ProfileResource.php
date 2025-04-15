@@ -21,6 +21,7 @@ class ProfileResource extends JsonResource
             'username' => $this->username,
             'email' => $this->email,
             'role_name' => $this->role->display_name ?? null,
+            'change_password_at' => format_date($this->change_password_at) ?? null
         ];
     }
 }

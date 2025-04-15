@@ -84,16 +84,12 @@ if (!function_exists('format_save_date')) {
 
 if (!function_exists('format_date')) {
     /**
-     * @param string $dateString
-     * @return string|null
+     * @param $dateString
      */
-    function format_date(string $dateString): ?string
+    function format_date($dateString)
     {
-        try {
-            $date = Carbon::parse($dateString);
-            return $date->format('d/m/Y');
-        } catch (\Exception $e) {
-            return null;
+        if($dateString) {
+            return Carbon::parse($dateString)->format('d/m/Y');
         }
     }
 }

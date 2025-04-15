@@ -69,14 +69,14 @@ class UserAPIRequest extends FormRequest
                     'username' => [
                         'nullable',
                         'regex:/^[a-zA-Z0-9]*$/',
-                        'unique:users,username,' . $this['id'] . ',id'
+                        'unique:users,username,'.$this['id'].',id,deleted_at,NULL',
                     ],
                     'email' => [
                         'required',
                         'email',
                         'regex:/^[a-zA-Z0-9@.-]*$/',
                         'ends_with:' . config('constants.user.domain_email'),
-                        'unique:users,email,' . $this['id'] . ',id'
+                        'unique:users,email,'.$this['id'].',id,deleted_at,NULL',
                     ],
                     'password' => [
                         'nullable',
@@ -122,7 +122,6 @@ class UserAPIRequest extends FormRequest
             'email.unique' => __('validation.email.unique'),
             'password.required' => __('validation.password.required'),
             'password.min' => __('validation.password.min'),
-            'new_password_confirmation.min' => __('validation.password.min'),
             'new_password_confirmation.required_with' => __('validation.new_password_confirmation.required_with'),
             'new_password_confirmation.same' => __('validation.new_password_confirmation.same'),
             'name.required' => __('validation.name.required'),
@@ -140,7 +139,7 @@ class UserAPIRequest extends FormRequest
     {
         return [
             'name' => ['required', 'regex:/^[a-zA-ZÀ-ỹ0-9\s]*$/'],
-            'role_id' => ['nullable', 'integer', 'exists:roles,id'],    
+            'role_id' => ['nullable', 'integer', 'exists:roles,id'],
         ];
     }
 }

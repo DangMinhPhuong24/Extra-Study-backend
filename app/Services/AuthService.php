@@ -2,11 +2,15 @@
 
 namespace App\Services;
 
-use App\Http\Resources\AuthResource;
-use App\Http\Resources\ProfileResource;
-use App\Repositories\UserRepository;
+use Illuminate\Support\Str;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use App\Http\Resources\AuthResource;
+use App\Http\Resources\UserResource;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Resources\ProfileResource;
 
 class AuthService
 {
@@ -137,6 +141,80 @@ class AuthService
             $dataUpdate = [
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => __('messages.put.user.error')
+            ];
+        }
+
+        return $dataUpdate;
+    }
+
+    /**
+     * Forgot Password.
+     *
+     * @return array
+     */
+    public function forgotPassword($email)
+    {
+        try {
+            $token = Str::random(64);
+            DB::table('password_reset_tokens')->insert([
+                'email' => $email,
+                'token' => $token,
+                'created_at' => now()
+            ]);
+
+            Mail::send('email.forgotPassword', ['token' => $token], function($message) use ($email) {
+                $message->to($email);
+                $message->subject('Reset Password');
+            });
+
+            return [
+                'statusCode' => Response::HTTP_OK,
+                'message' => __('messages.get.profile.success'),
+                'data' => $email
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => __('messages.get.profile.error'),
+                'data' => $th
+            ];
+        }
+    }
+
+    /**
+     * Reset Password.
+     *
+     * @return array
+     */
+    public function resetPassword($data)
+    {
+        try {
+            $reset = DB::table('password_reset_tokens')->where('token', $data['token'])->first();
+            if($reset) {
+                $userUpdate = $this->userRepository->getUserByEmail($reset->email);
+                $userUpdate->update([
+                    'change_password_at' => now(),
+                    'password' => Hash::make($data['password'])
+                ]);
+
+                DB::table('password_reset_tokens')->where('token', $data['token'])->delete();
+    
+                $dataUpdate = [
+                    'statusCode' => Response::HTTP_OK,
+                    'message' => __('messages.put.user.success'),
+                    'data' => new UserResource($userUpdate)
+                ];
+            } else {
+                $dataUpdate = [
+                    'statusCode' => Response::HTTP_UNAUTHORIZED,
+                    'message' => __('messages.error.token.invalid'),
+                ];
+            }
+        } catch (\Throwable $th) {
+            $dataUpdate = [
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => __('messages.put.user.error'),
+                'data' => $th
             ];
         }
 

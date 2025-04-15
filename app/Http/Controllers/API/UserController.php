@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\User\UserAPIRequest;
-use App\Services\UserService;
-use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Requests\User\UserAPIRequest;
+use App\Http\Controllers\AppBaseController;
 
 class UserController extends AppBaseController
 {

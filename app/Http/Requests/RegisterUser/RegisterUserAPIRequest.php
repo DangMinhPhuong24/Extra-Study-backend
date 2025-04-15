@@ -26,7 +26,7 @@ class RegisterUserAPIRequest extends FormRequest
         $method = $this->method();
 
         $validId = [
-            'id' => 'required|integer|exists:register_user,id'
+            'id' => 'required|integer|exists:register_user,register_id'
         ];
 
         switch ($method) {
