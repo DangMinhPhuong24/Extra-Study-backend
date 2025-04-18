@@ -41,6 +41,26 @@ class RegisterRepository extends BaseRepository
     }
 
     /**
+     * Search for User and select by Role model records
+     *
+     * @param $data
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function searchRegister($data)
+    {
+        $query = $this->model->newQuery();
+        if($data['register_user'] != null) {
+            $query->filterByRegisterUser();
+        }
+
+        return $query->searchByClassName($data['class_name'] ?? null)
+            ->searchBySubjectId($data['subject_id'] ?? null)
+            ->searchByTeacherId($data['teacher_id'] ?? null)
+            ->searchByStudyTime($data['from_date'] ?? null, $data['to_date'] ?? null)
+            ->paginate(config('constants.paginate'));
+    }
+
+    /**
      * Update Register increment registered_quantity
      *
      * @param $register

@@ -53,6 +53,8 @@ Route::group(['middleware' => 'api'], function () {
             Route::get('teacher_all',[UserController::class, 'teacherAll']);
             Route::get('subject_all',[SubjectController::class, 'subjectAll']);
             Route::get('study_time_all',[StudyTimeController::class, 'studyTimeAll']);
+
+            Route::get('registers',[RegisterController::class, 'index']);
         });
 
         Route::group([], function () {

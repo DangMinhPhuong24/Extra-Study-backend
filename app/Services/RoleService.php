@@ -6,6 +6,7 @@ use Illuminate\Http\Response;
 use App\Http\Resources\RoleResource;
 use App\Repositories\RoleRepository;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class RoleService
 {
@@ -24,11 +25,12 @@ class RoleService
      */
     public function roleAll()
     {
-        Cache::remember('role_all', now()->addMinutes(10), function () {
+        $roleAll = Cache::remember('role_all', now()->addMinutes(10), function () {
             return $this->roleRepository->getAllAPI();
         });
 
-        $roleAll = cache('role_all');
+        // $roleAll = $this->roleRepository->getAllAPI();
+        // Redis::set('role_all', $roleAll);
         
         if ($roleAll) {
             $dataIndex = [

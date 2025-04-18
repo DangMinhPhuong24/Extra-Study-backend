@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Response;
 use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 
 class UserService
 {
@@ -167,7 +168,10 @@ class UserService
      */
     public function userAll()
     {
-        $userAll = cache('user_all');
+        $userAll = Cache::remember('user_all', now()->addMinutes(10), function () {
+            return $this->userRepository->getAllAPI();
+        });
+
         if ($userAll) {
             $dataIndex = [
                 'statusCode' => Response::HTTP_OK,
