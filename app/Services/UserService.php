@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
@@ -207,6 +208,45 @@ class UserService
                 'message' => __('messages.get.user.error')
             ];
         }
+        return $dataAll;
+    }
+
+    /**
+     * upload Avatar.
+     *
+     * @param $request
+     * @return array
+     */
+    public function uploadAvatar($request)
+    {
+        if ($request['avatar']) {
+            $filename = $request['avatar']->getClientOriginalName();
+
+            // gener ra tên ngẫu nhiên
+            $data['avatar'] = $request['avatar']->store("", [
+                "disk" => "s3",
+                "visibility" => "public"
+            ]);
+            $userUpdate = $this->userRepository->findOrFailAPI(auth('api')->user()->id);
+            $userUpdate->update($data);
+
+            // giữ nguyên tên file => không khuyến khích
+            // Storage::disk('s3')->put('uploads/'.$filename , 
+            //     file_get_contents($request['avatar']), 
+            //     'public');
+
+            $dataAll = [
+                'statusCode' => Response::HTTP_OK,
+                'message' => __('messages.get.user.success')
+            ];
+        }
+        else {
+            $dataAll = [
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => __('messages.get.user.error')
+            ];
+        }
+
         return $dataAll;
     }
 }

@@ -45,6 +45,8 @@ Route::group(['middleware' => 'api'], function () {
             Route::put('update_user', [UserController::class, 'update']);
             Route::delete('delete_user',[UserController::class, 'destroy']);
             Route::get('user_all',[UserController::class, 'userAll']);
+
+            Route::post('upload_avatar', [UserController::class, 'uploadAvatar']);
         });
 
         Route::group([], function () {

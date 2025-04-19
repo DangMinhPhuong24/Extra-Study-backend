@@ -97,4 +97,14 @@ class UserController extends AppBaseController
             $users['data'] ?? []
         );
     }
+
+    public function uploadAvatar(Request $request)
+    {
+        $users = $this->userService->uploadAvatar($request->all());
+        return $this->sentResponse(
+            $users['statusCode'],
+            $users['message'],
+            $users['data'] ?? []
+        );
+    }
 }
