@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\GoogleController;
 use App\Http\Controllers\API\SubjectController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\StudyTimeController;
@@ -23,10 +24,13 @@ use App\Http\Controllers\API\RegisterUserController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::get('/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 Route::group(['middleware' => 'api'], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/login', [AuthController::class, 'login']);
-
+        Route::get('/google', [GoogleController::class, 'redirectToGoogle']);
+        
+        
         Route::post('/forgot_password', [AuthController::class, 'forgotPassword']);
         Route::post('/reset_password', [AuthController::class, 'resetPassword']);
 

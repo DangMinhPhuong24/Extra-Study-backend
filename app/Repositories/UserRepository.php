@@ -18,7 +18,8 @@ class UserRepository extends BaseRepository
         'username',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'google_id'
     ];
 
     /**
@@ -86,5 +87,16 @@ class UserRepository extends BaseRepository
     public function getUserByEmail($email)
     {
         return $this->model->whereByEmail($email)->first();
+    }
+
+    /**
+     * Get user by googleId
+     *
+     * @param $googleId
+     * @return mixed
+     */
+    public function getUserByGoogleId($googleId)
+    {
+        return $this->model->whereByGoogleId($googleId)->first();
     }
 }

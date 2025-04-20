@@ -28,7 +28,8 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'role_id',
         'login_at',
-        'change_password_at'
+        'change_password_at',
+        'google_id'
     ];
 
     /**
@@ -135,5 +136,15 @@ class User extends Authenticatable implements JWTSubject
     public function scopeWhereByEmail($query, $email)
     {
         return $query->where('email', $email);
+    }
+
+    /**
+     * @param $query
+     * @param $googleId
+     * @return mixed
+     */
+    public function scopeWhereByGoogleId($query, $googleId)
+    {
+        return $query->where('google_id', $googleId);
     }
 }
