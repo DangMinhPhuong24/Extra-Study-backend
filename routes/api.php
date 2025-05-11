@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\GoogleController;
@@ -51,6 +52,7 @@ Route::group(['middleware' => 'api'], function () {
             Route::get('user_all',[UserController::class, 'userAll']);
 
             Route::post('upload_avatar', [UserController::class, 'uploadAvatar']);
+            Route::get('user_all_except_myself',[UserController::class, 'userAllExceptMyself']);
         });
 
         Route::group([], function () {
@@ -69,6 +71,11 @@ Route::group(['middleware' => 'api'], function () {
             Route::get('detail_register_user', [RegisterUserController::class, 'show']); // Danh sách học sinh đã đăng ký 
             Route::put('update_register_user', [RegisterUserController::class, 'update']);
             Route::delete('delete_register_user',[RegisterUserController::class, 'destroy']);
+        });
+
+        Route::group([], function () {
+            Route::post('send_message', [ChatController::class, 'store']);
+            Route::get('chat_all', [ChatController::class, 'chatAll']); 
         });
     });
 });

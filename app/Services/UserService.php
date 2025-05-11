@@ -249,4 +249,34 @@ class UserService
 
         return $dataAll;
     }
+
+    /**
+     * Display all User Except Myself.
+     *
+     * @return array
+     */
+    public function userAllExceptMyself()
+    {
+        $userAll = Cache::get('user_all_except_myself');
+        
+        if($userAll == null) {
+            $userAll = Cache::remember('user_all_except_myself', now()->addMinutes(10), function () {
+                return $this->userRepository->getUserAllExceptMyself(auth('api')->user()->id);
+            });
+        }
+
+        if ($userAll) {
+            $dataIndex = [
+                'statusCode' => Response::HTTP_OK,
+                'message' => __('messages.get.user.success'),
+                'data' => UserResource::collection($userAll)
+            ];
+        } else {
+            $dataIndex = [
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => __('messages.get.user.error')
+            ];
+        }
+        return $dataIndex;
+    }
 }

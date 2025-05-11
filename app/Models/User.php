@@ -147,4 +147,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $query->where('google_id', $googleId);
     }
+
+    /**
+     * @param $query
+     * @param $userId
+     * @return mixed
+     */
+    public function scopeWhereNotInId($query, $userId)
+    {
+        return $query->where('id', '!=', $userId);
+    }
 }

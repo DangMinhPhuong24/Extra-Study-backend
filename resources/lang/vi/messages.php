@@ -45,6 +45,10 @@ return [
             'success' => 'Lấy dữ liệu thành công.',
             'error' => 'Lấy dữ liệu thất bại.',
         ],
+        'chat' => [
+            'success' => 'Lấy dữ liệu thành công.',
+            'error' => 'Lấy dữ liệu thất bại.',
+        ],
     ],
     'post' => [
         'login' => [
@@ -78,6 +82,10 @@ return [
         'registerUser' => [
             'success' => 'Đăng ký thời khóa biểu thành công.',
             'error' => 'Đăng ký thời khóa biểu thất bại.'
+        ],
+        'chat' => [
+            'success' => 'Chat thành công.',
+            'error' => 'Chat thất bại.'
         ],
     ],
     'put' => [

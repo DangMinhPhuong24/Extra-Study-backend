@@ -99,4 +99,15 @@ class UserRepository extends BaseRepository
     {
         return $this->model->whereByGoogleId($googleId)->first();
     }
+
+    /**
+     * Get all user Except Myself
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public function getUserAllExceptMyself($userId)
+    {
+        return $this->model->whereNotInId($userId)->get();
+    }
 }

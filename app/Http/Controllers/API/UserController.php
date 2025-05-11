@@ -107,4 +107,14 @@ class UserController extends AppBaseController
             $users['data'] ?? []
         );
     }
+
+    public function userAllExceptMyself()
+    {
+        $users = $this->userService->userAllExceptMyself();
+        return $this->sentResponse(
+            $users['statusCode'],
+            $users['message'],
+            $users['data'] ?? []
+        );
+    }
 }
