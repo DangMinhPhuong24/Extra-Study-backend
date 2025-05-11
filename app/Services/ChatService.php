@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\MessageSent;
 use Illuminate\Http\Response;
 use App\Http\Resources\ChatResource;
 use App\Repositories\ChatRepository;
@@ -24,6 +25,9 @@ class ChatService
     public function store($data)
     {
         $data['sender_id'] = auth('api')->user()->id;
+
+        broadcast(new MessageSent($data['sender_id'], $data['content']));
+
         $chatStore = $this->chatRepository->storeAPI($data);
 
         if ($chatStore) {
