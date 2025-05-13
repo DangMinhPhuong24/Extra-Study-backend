@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::truncate();
-        
+
         $users = [
             [
                 'name' => 'Admin',
@@ -37,6 +37,20 @@ class UserSeeder extends Seeder
                 'email' => 'teacher2@gmail.com',
                 'password' => Hash::make('Teacher@1234'),
                 'role_id'  => 2,
+            ],
+            [
+                'name' => 'Student 1',
+                'username' => 'student1',
+                'email' => 'student1@gmail.com',
+                'password' => Hash::make('Student@1234'),
+                'role_id'  => 3,
+            ],
+            [
+                'name' => 'Student 2',
+                'username' => 'student2',
+                'email' => 'student2@gmail.com',
+                'password' => Hash::make('Student@1234'),
+                'role_id'  => 3,
             ]
         ];
         foreach($users as $user) {

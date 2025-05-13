@@ -25,10 +25,9 @@ class ChatService
     public function store($data)
     {
         $data['sender_id'] = auth('api')->user()->id;
-
-        broadcast(new MessageSent($data['sender_id'], $data['content']));
-
         $chatStore = $this->chatRepository->storeAPI($data);
+
+        broadcast(new MessageSent($chatStore->id, auth('api')->user(), $data['content'],  format_date_time($chatStore->created_at)));
 
         if ($chatStore) {
             $dataStore = [
@@ -47,14 +46,14 @@ class ChatService
 
     /**
      * Display all Chat.
-     * 
+     *
      * @param $data
      * @return array
      */
     public function chatAll($data)
     {
         $chatAll = $this->chatRepository->getBySenderIdAndReceiverId(auth('api')->user()->id, $data['receiver_id']);
-        
+
         if ($chatAll) {
             $dataIndex = [
                 'statusCode' => Response::HTTP_OK,
