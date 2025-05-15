@@ -9,6 +9,8 @@ use App\Repositories\RegisterRepository;
 use App\Http\Resources\RegisterUserResource;
 use App\Repositories\RegisterUserRepository;
 use App\Http\Resources\DetailRegisterUserResource;
+use App\Mail\WelcomeUser;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterUserService
 {
@@ -34,7 +36,6 @@ class RegisterUserService
     /**
      * Display a listing of the User.
      *
-     * @param $data
      * @return array
      */
     public function index()
@@ -64,7 +65,7 @@ class RegisterUserService
      */
     public function store($data)
     {
-        $user = auth('api')->user()->id;
+        $user = auth('api')->user();
         if ($user) {
             foreach ($data['register_ids'] as $registerId) {
                 $dataCreateRegisterUser = [
@@ -76,7 +77,7 @@ class RegisterUserService
                 $register = $this->registerRepository->findOrFailAPI($registerId);
                 $this->registerRepository->incrementRegisteredQuantity($register);
             }
-
+            Mail::to($user->email)->queue(new WelcomeUser($user));
             $dataStore = [
                 'statusCode' => Response::HTTP_CREATED,
                 'message' => __('messages.post.registerUser.success'),
@@ -147,6 +148,7 @@ class RegisterUserService
                     $register = $this->registerRepository->findOrFailAPI($registerId);
                     $this->registerRepository->incrementRegisteredQuantity($register);
                 }
+                Mail::to($user->email)->queue(new WelcomeUser($user));
 
                 $dataUpdate = [
                     'statusCode' => Response::HTTP_OK,
@@ -168,7 +170,8 @@ class RegisterUserService
 
             return [
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => __('messages.put.registerUser.error')
+                'message' => __('messages.put.registerUser.error'),
+                'data' => $e->getMessage()
             ];
         }
     }
