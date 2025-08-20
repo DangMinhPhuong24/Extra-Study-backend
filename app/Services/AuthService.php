@@ -32,7 +32,7 @@ class AuthService
         $credentials = $request->only('username', 'password');
         $token = auth('api')->attempt($credentials);
         $checkUsername = $this->userRepository->checkUsernameAPI($request->username);
-        
+
         if(!empty($token))
         {
             $user = auth('api')->user();
@@ -176,7 +176,7 @@ class AuthService
             return [
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => __('messages.get.profile.error'),
-                'data' => $th
+                'data' => $th->getMessage()
             ];
         }
     }
@@ -198,7 +198,7 @@ class AuthService
                 ]);
 
                 DB::table('password_reset_tokens')->where('token', $data['token'])->delete();
-    
+
                 $dataUpdate = [
                     'statusCode' => Response::HTTP_OK,
                     'message' => __('messages.put.user.success'),
