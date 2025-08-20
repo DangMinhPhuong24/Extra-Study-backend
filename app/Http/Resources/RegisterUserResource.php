@@ -16,7 +16,7 @@ class RegisterUserResource extends JsonResource
     {
         $quantity = (double) $this->register->quantity;
         $registeredQuantity = (double) $this->register->registered_quantity;
-        
+
         return [
             'id' => $this->id,
             'student_name' => $this->user->name ?? null,
@@ -32,10 +32,10 @@ class RegisterUserResource extends JsonResource
             'weekday' => $this->register->studyTime->weekday ?? null,
             'from_hour' => $this->register->studyTime->from_hour ?? null,
             'to_hour' => $this->register->studyTime->to_hour ?? null,
-            'from_date' => format_date($this->register->studyTime->from_date) ?? null,
-            'to_date' => format_date($this->register->studyTime->to_date) ?? null,
-            'from_date_origin' => $this->register->studyTime->from_date ?? null,
-            'to_date_origin' =>$this->register->studyTime->to_date ?? null
+            'from_date' => format_date($this->date),
+            'to_date' => format_date($this->date),
+            'from_date_origin' => $this->date,
+            'to_date_origin' =>$this->date
         ];
     }
 }

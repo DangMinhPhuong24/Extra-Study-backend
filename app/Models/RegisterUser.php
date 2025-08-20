@@ -15,6 +15,7 @@ class RegisterUser extends Model
     protected $fillable = [
         'register_id',
         'user_id',
+        'date'
     ];
 
     /**
