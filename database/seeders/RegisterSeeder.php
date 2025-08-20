@@ -40,7 +40,7 @@ class RegisterSeeder extends Seeder
                 'class_name' => 'Địa lý ',
             ]
         ];
-        
+
         foreach($registers as $index => $register) {
             for($j = 1; $j <= 36; $j++) {
                 Register::create([

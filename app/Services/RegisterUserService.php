@@ -142,8 +142,6 @@ class RegisterUserService
                 foreach ($data['register_ids'] as $registerId) {
                     $register = $this->registerRepository->findOrFailAPI($registerId);
                     $this->registerRepository->incrementRegisteredQuantity($register);
-
-
                     $fromDate = Carbon::parse($register->studyTime->from_date);
                     $toDate = Carbon::parse($register->studyTime->to_date);
 
