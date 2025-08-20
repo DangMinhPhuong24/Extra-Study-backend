@@ -135,7 +135,7 @@ class RegisterUserService
                     $register = $this->registerRepository->findOrFailAPI($registerUser->register_id);
                     $this->registerRepository->decrementRegisteredQuantity($register);
                 }
-                $user->registerUser()->forceDelete();
+                $user->registerUser()->delete();
 
                 foreach ($data['register_ids'] as $registerId) {
                     $register = $this->registerRepository->findOrFailAPI($registerId);
