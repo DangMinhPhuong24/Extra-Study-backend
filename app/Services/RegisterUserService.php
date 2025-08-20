@@ -137,13 +137,11 @@ class RegisterUserService
                     $register = $this->registerRepository->findOrFailAPI($registerUser->register_id);
                     $this->registerRepository->decrementRegisteredQuantity($register);
                 }
-                $user->registerUser()->delete();
+                $user->registerUser()->forceDelete();
 
                 foreach ($data['register_ids'] as $registerId) {
                     $register = $this->registerRepository->findOrFailAPI($registerId);
                     $this->registerRepository->incrementRegisteredQuantity($register);
-
-
                     $fromDate = Carbon::parse($register->studyTime->from_date);
                     $toDate = Carbon::parse($register->studyTime->to_date);
 

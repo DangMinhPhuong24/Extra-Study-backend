@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\RegisterUser;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class RegisterUserRepository
@@ -57,6 +58,9 @@ class RegisterUserRepository extends BaseRepository
      */
     public function getAllByRegisterId($registerId)
     {
-        return $this->model->searchByRegisterId($registerId)->get();
+        return $this->model->select(DB::raw('MIN(id) as id'), 'user_id', 'register_id')
+            ->searchByRegisterId($registerId)
+            ->groupBy('user_id', 'register_id')
+            ->get();
     }
 }
