@@ -15,6 +15,7 @@ class RegisterUserRepository extends BaseRepository
     protected $fieldSearchable = [
         'register_id',
         'user_id',
+        'date'
     ];
 
     /**

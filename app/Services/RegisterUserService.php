@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\UserRepository;
@@ -139,14 +140,22 @@ class RegisterUserService
                 $user->registerUser()->forceDelete();
 
                 foreach ($data['register_ids'] as $registerId) {
-                    $dataCreateRegisterUser = [
-                        'register_id' => $registerId,
-                        'user_id' => auth('api')->user()->id,
-                    ];
-                    $registerUser = $this->registerUserRepository->storeAPI($dataCreateRegisterUser);
-
                     $register = $this->registerRepository->findOrFailAPI($registerId);
                     $this->registerRepository->incrementRegisteredQuantity($register);
+
+
+                    $fromDate = Carbon::parse($register->studyTime->from_date);
+                    $toDate = Carbon::parse($register->studyTime->to_date);
+
+                    while ($fromDate->lte($toDate)) {
+                        $dataCreateRegisterUser = [
+                            'register_id' => $registerId,
+                            'user_id' => $user->id,
+                            'date' => $fromDate->toDateString()
+                        ];
+                        $registerUser = $this->registerUserRepository->storeAPI($dataCreateRegisterUser);
+                        $fromDate->addWeek();
+                    }
                 }
                 Mail::to($user->email)->queue(new WelcomeUser($user));
 
