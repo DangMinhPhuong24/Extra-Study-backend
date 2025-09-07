@@ -1,0 +1,29 @@
+name: Deploy Backend to Cloudways
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      
+    - name: Deploy to Cloudways via SSH
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+          host: ${{ secrets.CLOUDWAYS_HOST }}
+          username: ${{ secrets.CLOUDWAYS_USER }}
+          key: ${{ secrets.CLOUDWAYS_SSH_KEY }}
+          port: 22
+          script: |
+            cd /home/1517904.cloudwaysapps.com/vzjpmgyckw/public_html
+            git pull origin main
+            composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+            php artisan migrate --force
+            php artisan config:clear
+            php artisan cache:clear
+            php artisan config:cache
