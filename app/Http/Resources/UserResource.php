@@ -22,8 +22,8 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'email' => $this->email,
             'role' => [
-                'id'=> $this->role_id,
-                'display_name'=> $this->role->display_name ?? null,
+                'id' => $this->roles->first()->id ?? null,
+                'display_name' => $this->roles->first()->display_name ?? null
             ],
             'login_at' => $this->login_at ?? 'Chưa có lần đăng nhập',
             'change_password_at'=> $this->change_password_at ? Carbon::parse($this->change_password_at)->format('H:i:s d/m/Y') : 'Chưa thay đổi mật khẩu',

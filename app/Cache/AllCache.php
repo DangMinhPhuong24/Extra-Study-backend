@@ -40,7 +40,7 @@ class AllCache
         $this->studyTimeRepository = $studyTimeRepository;
     }
 
-    public function cac() 
+    public function testCache() 
     {
         Cache::remember('user_all', now()->addMinutes(10), function () {
             return $this->userRepository->getAllAPI();

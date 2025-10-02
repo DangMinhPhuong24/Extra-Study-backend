@@ -57,19 +57,36 @@ Route::group(['middleware' => 'api'], function () {
 
         Route::group([], function () {
             Route::get('role_all',[RoleController::class, 'roleAll']);
-            Route::get('register_all',[RegisterController::class, 'registerAll']); // Danh sách tất cả các register để đăng ký
+            Route::get('register_all',[RegisterController::class, 'registerAll']); 
             Route::get('teacher_all',[UserController::class, 'teacherAll']);
             Route::get('subject_all',[SubjectController::class, 'subjectAll']);
             Route::get('study_time_all',[StudyTimeController::class, 'studyTimeAll']);
 
-            Route::get('registers',[RegisterController::class, 'index']);
+            // Danh sách tất cả các register để đăng ký
+            Route::get('registers',[RegisterController::class, 'index'])->middleware(
+                'check:module_registers.register_user_management.all'
+            ); 
         });
 
         Route::group([], function () {
-            Route::get('register_users', [RegisterUserController::class, 'index']); // Những register mà 1 học sinh đã đăng ký
-            Route::post('create_register_user', [RegisterUserController::class, 'store']);
-            Route::get('detail_register_user', [RegisterUserController::class, 'show']); // Danh sách học sinh đã đăng ký
-            Route::put('update_register_user', [RegisterUserController::class, 'update']);
+            // Những register mà 1 học sinh đã đăng ký
+            Route::get('register_users', [RegisterUserController::class, 'index'])->middleware(
+                'check:module_registers.register_user_management.index'
+            ); 
+
+            Route::post('create_register_user', [RegisterUserController::class, 'store'])->middleware(
+                'check:module_registers.register_user_management.store'
+            );
+
+            // Danh sách học sinh đã đăng ký
+            Route::get('detail_register_user', [RegisterUserController::class, 'show'])->middleware(
+                'check:module_registers.register_user_management.show'
+            ); 
+
+            Route::put('update_register_user', [RegisterUserController::class, 'update'])->middleware(
+                'check:module_registers.register_user_management.update'
+            );
+
             Route::delete('delete_register_user',[RegisterUserController::class, 'destroy']);
         });
 
