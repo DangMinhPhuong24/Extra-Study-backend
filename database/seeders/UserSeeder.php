@@ -15,45 +15,53 @@ class UserSeeder extends Seeder
     {
         User::truncate();
 
-        $users = [
+        $typeAdmin = 'admin';
+        $typeTeacher = 'teacher';
+        $typeStudent = 'student';
+
+        $admin = [
             [
-                'name' => 'Admin',
-                'username' => 'admin',
-                'email' => 'admin@gmail.com',
-                'password' => Hash::make('Admin@12'),
-                'role_id'  => 1,
-            ],
-            [
-                'name' => 'N.T.An',
-                'username' => 'teacher1',
-                'email' => 'teacher1@gmail.com',
-                'password' => Hash::make('Teacher@1234'),
-                'role_id'  => 2,
-            ],
-            [
-                'name' => 'K.H.Dương',
-                'username' => 'teacher2',
-                'email' => 'teacher2@gmail.com',
-                'password' => Hash::make('Teacher@1234'),
-                'role_id'  => 2,
-            ],
-            [
-                'name' => 'Student 1',
-                'username' => 'student1',
-                'email' => 'student1@gmail.com',
-                'password' => Hash::make('Student@12'),
-                'role_id'  => 3,
-            ],
-            [
-                'name' => 'Student 2',
-                'username' => 'student2',
-                'email' => 'student2@gmail.com',
-                'password' => Hash::make('Student@12'),
-                'role_id'  => 3,
+                'name' => 'Admin','email' => 'admin@gmail.com',
+                'username' => 'admin','password' => Hash::make('Admin@12'),
             ]
         ];
-        foreach($users as $user) {
-            User::create($user);
+
+        foreach ($admin as $item)
+        {
+            $user = User::create($item);
+            $user->assignRole($typeAdmin);
+        }
+
+        $teacher = [
+            [
+                'name' => 'N.T.An','email' => 'teacher1@gmail.com',
+                'username' => 'teacher1','password' => Hash::make('Dodoandc@1234'),
+            ],
+            [
+                'name' => 'K.H.Dương','email' => 'teacher2@gmail.com',
+                'username' => 'teacher2','password' => Hash::make('Dodoandc@1234'),
+            ]
+        ];
+
+        foreach ($teacher as $item)
+        {
+            $user = User::create($item);
+            $user->assignRole($typeTeacher);
+        }
+
+        $student = [
+            [
+                'name' => 'Student 1','email' => 'student1@gmail.com',
+                'username' => 'student1','password' => Hash::make('Student@12'),
+            ],
+            [
+                'name' => 'Student 2','email' => 'student2@gmail.com',
+                'username' => 'student2','password' => Hash::make('Student@12'),
+            ]
+        ];
+        foreach($student as $item) {
+            $user = User::create($item);
+            $user->assignRole($typeStudent);
         }
     }
 }

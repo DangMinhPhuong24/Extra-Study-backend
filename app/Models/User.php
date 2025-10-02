@@ -8,11 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
     use SoftDeletes;
 
     /**
@@ -73,11 +74,11 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return bool
      */
-    public function role()
+    public function isAdmin(): bool
     {
-        return $this->belongsTo(Role::class);
+        return $this->hasRole(config('constants.role.admin.name'));
     }
 
     /**
@@ -122,7 +123,9 @@ class User extends Authenticatable implements JWTSubject
     public function scopeSearchByRoleId($query, $roleId): mixed
     {
         if ($roleId) {
-            $query->where('role_id', $roleId);
+            $query->whereHas('roles', function($q) use ($roleId) {
+                $q->where('id', $roleId);
+            });
         }
 
         return $query;
